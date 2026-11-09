@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitki Bakım Rehberi</title>
+    <meta
+      name="description"
+      content="Bitki bakım rehberi, bitki ve hastalık tespiti için tek sayfa uygulama."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand" aria-label="Bitki bakım rehberi logosu">
+          <div class="logo">🌿</div>
+          <div>
+            <strong>BitkiRehberi</strong>
+            <small>AI Destekli Bakım</small>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Ana menü">
+          <a href="#home">Ana Sayfa</a>
+          <a href="#guide">Rehber</a>
+          <a href="#detect">Tespit</a>
+          <a href="#footer">İletişim</a>
+        </nav>
+
+        <button id="openAdmin" class="primary-button small" type="button">
+          Yönetim Paneli
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <span class="eyebrow">Bitki Bakım Rehberi</span>
+            <h1>Bitkilerinizi daha sağlıklı büyütün.</h1>
+            <p>
+              Bitki rehberi, hastalık ve tür tespiti ile evde bakımı kolaylaştırın.
+              Arama, fotoğraf yükleme ve yapay zeka destekli öneriler tek ekranda.
+            </p>
+            <div class="cta-row">
+              <a href="#guide" class="primary-button">Bitki Rehberine Git</a>
+              <a href="#detect" class="secondary-button">Tespit Yap</a>
+            </div>
+            <ul class="hero-stats">
+              <li><strong>1200+</strong><span>Bitki kaydı</span></li>
+              <li><strong>24/7</strong><span>Yardım</span></li>
+              <li><strong>1</strong><span>Günlük sorgu</span></li>
+            </ul>
+          </div>
+
+          <div class="hero-card">
+            <div class="mini-card">
+              <span>Popüler aramalar</span>
+              <div>
+                <button type="button" class="pill" data-plant="kaktüs">Kaktüs</button>
+                <button type="button" class="pill" data-plant="orkide">Orkide</button>
+                <button type="button" class="pill" data-plant="paşa kılıcı">Paşa Kılıcı</button>
+              </div>
+            </div>
+            <div class="mini-card highlight">
+              <p>Yapay zeka desteği</p>
+              <strong>Bitki türü ve hastalık tespiti</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="guide" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <span class="eyebrow">Bitki Bakım Rehberi</span>
+            <h2>Bitkinizi arayın</h2>
+          </div>
+
+          <div class="search-box">
+            <input
+              id="plantSearchInput"
+              type="text"
+              placeholder="Bitkinin adını yazın: kaktüs, orkide, paşa kılıcı"
+              aria-label="Bitki arama alanı"
+            />
+            <button id="plantSearchBtn" class="primary-button" type="button">
+              Ara
+            </button>
+          </div>
+
+          <div id="guideResults" class="result-grid" aria-live="polite"></div>
+          <div id="guideEmpty" class="empty-state hidden">
+            Aradığınız bitki kayıtlarda bulunamadı. Yönetim panelinden yeni bitki ekleyebilirsiniz.
+          </div>
+        </div>
+      </section>
+
+      <section id="detect" class="section alt-grid">
+        <div class="container detect-layout">
+          <div class="detect-panel">
+            <div class="section-heading left">
+              <span class="eyebrow">Tespit</span>
+              <h2>Fotoğraftan analiz yap</h2>
+            </div>
+
+            <div class="upload-zone" id="uploadZone">
+              <input id="imageInput" type="file" accept="image/*" hidden />
+              <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden />
+
+              <div class="upload-content">
+                <div class="upload-icon">📷</div>
+                <p>Fotoğraf yükleyin veya çekin</p>
+                <div class="upload-actions">
+                  <button id="selectImageBtn" class="secondary-button" type="button">
+                    Dosyadan Yükle
+                  </button>
+                  <button id="captureImageBtn" class="secondary-button" type="button">
+                    Fotoğraf Çek
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="options-row">
+              <label>
+                <input type="radio" name="detectMode" value="plant" checked />
+                Bitki Türü Tespiti
+              </label>
+              <label>
+                <input type="radio" name="detectMode" value="disease" />
+                Hastalık Tespiti
+              </label>
+            </div>
+
+            <button id="runDetectionBtn" class="primary-button wide" type="button">
+              Sorgula
+            </button>
+
+            <div class="image-preview hidden" id="imagePreviewWrap">
+              <img id="previewImage" src="" alt="Önizleme" />
+            </div>
+          </div>
+
+          <div class="results-panel">
+            <h3>Sonuç</h3>
+            <div id="resultSummary" class="result-summary">
+              Henüz bir sorgu yapılmadı. Fotoğraf yükledikten sonra analiz yapabilirsiniz.
+            </div>
+            <div id="detectionResults" class="detection-results"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside id="adminModal" class="modal hidden" aria-modal="true" role="dialog">
+      <div class="modal-card">
+        <button id="closeAdmin" class="close-button" type="button" aria-label="Kapat">×</button>
+
+        <div id="loginSection" class="admin-section">
+          <span class="eyebrow">Giriş</span>
+          <h3>Yönetim Paneli</h3>
+          <div class="admin-form">
+            <label>
+              Kullanıcı Adı
+              <input id="adminUsername" type="text" placeholder="admin" />
+            </label>
+            <label>
+              Şifre
+              <input id="adminPassword" type="password" placeholder="••••••••" />
+            </label>
+            <button id="loginAdminBtn" class="primary-button wide" type="button">Giriş Yap</button>
+          </div>
+        </div>
+
+        <div id="adminDashboard" class="admin-section hidden">
+          <span class="eyebrow">Yönetim Paneli</span>
+          <h3>Kontrol Paneli</h3>
+
+          <div class="admin-cards">
+            <div class="admin-card">
+              <h4>Yeni Kullanıcı Ekle</h4>
+              <div class="inline-form">
+                <input id="newUserName" type="text" placeholder="Kullanıcı adı" />
+                <input id="newUserPassword" type="password" placeholder="Şifre" />
+                <button id="addUserBtn" class="secondary-button" type="button">Kaydet</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <h4>API Ayarları</h4>
+              <div class="api-form">
+                <select id="apiModelSelect">
+                  <option value="GPT-4o">GPT-4o</option>
+                  <option value="Gemini Pro">Gemini Pro</option>
+                  <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
+                  <option value="Llama 3.1">Llama 3.1</option>
+                </select>
+                <input id="apiKeyPrimary" type="password" placeholder="Birincil API anahtarı" />
+                <input id="apiKeySecondary" type="password" placeholder="Yedek API anahtarı" />
+                <input id="apiKeyTertiary" type="password" placeholder="İkincil yedek API anahtarı" />
+                <input id="dailyLimitInput" type="number" min="1" max="50" value="1" />
+                <button id="saveApiBtn" class="secondary-button" type="button">Ayarları Kaydet</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <h4>Bitki Rehberi Ekle</h4>
+              <div class="plant-form">
+                <input id="newPlantTurkish" type="text" placeholder="Türkçe isim" />
+                <input id="newPlantLatin" type="text" placeholder="Latince isim" />
+                <textarea id="newPlantSoil" rows="2" placeholder="Toprak özellikleri"></textarea>
+                <textarea id="newPlantLight" rows="2" placeholder="Işık ve güneş alma durumu"></textarea>
+                <textarea id="newPlantWater" rows="2" placeholder="Sulama özellikleri"></textarea>
+                <textarea id="newPlantCare" rows="2" placeholder="Bakım ipuçları"></textarea>
+                <textarea id="newPlantFeeding" rows="2" placeholder="Gübre ve besin"></textarea>
+                <textarea id="newPlantDisease" rows="2" placeholder="Hastalık bilgisi"></textarea>
+                <button id="savePlantBtn" class="secondary-button" type="button">Bitki Kaydet</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-actions">
+            <button id="logoutAdminBtn" class="primary-button" type="button">Çıkış Yap</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <footer id="footer" class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <strong>BitkiRehberi</strong>
+          <p>Bitkileriniz için güvenli ve pratik bakım rehberi.</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="#guide">Bitki Rehberi</a>
+          <a href="#detect">Tespit</a>
+          <a href="#home">Ana Sayfa</a>
+        </div>
+
+        <a
+          class="whatsapp-link"
+          href="https://wa.me/905551234567?text=Bitki%20rehberi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum"
+          target="_blank"
+          rel="noreferrer"
+        >
+          WhatsApp İletişim
+        </a>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast hidden" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
